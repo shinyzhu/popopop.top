@@ -133,7 +133,7 @@
               </div>
 
               <!-- Text shadow toggle -->
-              <div class="form-check form-switch mb-3">
+              <div class="form-check form-switch mb-2">
                 <input
                   class="form-check-input"
                   type="checkbox"
@@ -144,9 +144,18 @@
                   >Text Shadow</label
                 >
               </div>
+              <div class="mb-3 ms-4">
+                <label for="shadowColor" class="form-label">Shadow Color</label>
+                <input
+                  type="color"
+                  id="shadowColor"
+                  class="form-control form-control-color"
+                  value="#222222"
+                />
+              </div>
 
               <!-- Stroke toggle -->
-              <div class="form-check form-switch mb-3">
+              <div class="form-check form-switch mb-2">
                 <input
                   class="form-check-input"
                   type="checkbox"
@@ -155,6 +164,15 @@
                 <label class="form-check-label fw-semibold" for="strokeToggle"
                   >Outline / Stroke</label
                 >
+              </div>
+              <div class="mb-3 ms-4">
+                <label for="strokeColor" class="form-label">Stroke Color</label>
+                <input
+                  type="color"
+                  id="strokeColor"
+                  class="form-control form-control-color"
+                  value="#222222"
+                />
               </div>
 
               <!-- Bold & Italic toggles -->

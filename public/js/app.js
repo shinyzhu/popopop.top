@@ -14,6 +14,8 @@ const popDisplay = document.getElementById("popDisplay");
 const fontUpload = document.getElementById("fontUpload");
 const boldToggle = document.getElementById("boldToggle");
 const italicToggle = document.getElementById("italicToggle");
+const shadowColor = document.getElementById("shadowColor");
+const strokeColor = document.getElementById("strokeColor");
 let customFontCounter = 0;
 
 // ── Update helpers ──
@@ -44,13 +46,22 @@ function updateBgColor() {
 }
 
 function updateShadow() {
-  popDisplay.style.textShadow = shadowToggle.checked
-    ? "4px 4px 0 #222, 8px 8px 0 rgba(0,0,0,0.15)"
-    : "none";
+  if (shadowToggle.checked) {
+    const c = shadowColor.value;
+    popDisplay.style.textShadow = `4px 4px 0 ${c}, 8px 8px 0 ${c}44`;
+  } else {
+    popDisplay.style.textShadow = "none";
+  }
 }
 
 function updateStroke() {
-  popDisplay.classList.toggle("stroke", strokeToggle.checked);
+  if (strokeToggle.checked) {
+    popDisplay.style.webkitTextStroke = `2px ${strokeColor.value}`;
+    popDisplay.style.paintOrder = "stroke fill";
+  } else {
+    popDisplay.style.webkitTextStroke = "";
+    popDisplay.style.paintOrder = "";
+  }
 }
 
 function updateBold() {
@@ -69,6 +80,8 @@ textColor.addEventListener("input", updateTextColor);
 bgColor.addEventListener("input", updateBgColor);
 shadowToggle.addEventListener("change", updateShadow);
 strokeToggle.addEventListener("change", updateStroke);
+shadowColor.addEventListener("input", updateShadow);
+strokeColor.addEventListener("input", updateStroke);
 boldToggle.addEventListener("change", updateBold);
 italicToggle.addEventListener("change", updateItalic);
 fontUpload.addEventListener("change", handleFontUpload);
