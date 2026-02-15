@@ -14,7 +14,11 @@ const popDisplay = document.getElementById("popDisplay");
 
 // ── Update helpers ──
 function updateText() {
-  popDisplay.textContent = popText.value || "POP";
+  const raw = popText.value || "POP";
+  popDisplay.innerHTML = raw
+    .split("\n")
+    .map((line) => line || "&nbsp;")
+    .join("<br>");
 }
 
 function updateFont() {
