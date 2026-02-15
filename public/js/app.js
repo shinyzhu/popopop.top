@@ -61,6 +61,31 @@ shadowToggle.addEventListener("change", updateShadow);
 strokeToggle.addEventListener("change", updateStroke);
 fontUpload.addEventListener("change", handleFontUpload);
 
+// ── Load server-side fonts on startup ──
+loadServerFonts();
+
+async function loadServerFonts() {
+  try {
+    const res = await fetch("/api/fonts");
+    const fonts = await res.json();
+
+    for (const { name, url } of fonts) {
+      const familyName = `Server_${name}`;
+      const encodedUrl = encodeURI(url);
+      const fontFace = new FontFace(familyName, `url('${encodedUrl}')`);
+      await fontFace.load();
+      document.fonts.add(fontFace);
+
+      const option = document.createElement("option");
+      option.value = `'${familyName}'`;
+      option.textContent = `${name} (server)`;
+      fontSelect.appendChild(option);
+    }
+  } catch (err) {
+    console.error("Failed to load server fonts:", err);
+  }
+}
+
 // ── Custom font upload ──
 async function handleFontUpload(e) {
   const files = e.target.files;
