@@ -12,6 +12,8 @@ const copyToast = document.getElementById("copyToast");
 const preview = document.getElementById("preview");
 const popDisplay = document.getElementById("popDisplay");
 const fontUpload = document.getElementById("fontUpload");
+const boldToggle = document.getElementById("boldToggle");
+const italicToggle = document.getElementById("italicToggle");
 let customFontCounter = 0;
 
 // ── Update helpers ──
@@ -51,6 +53,14 @@ function updateStroke() {
   popDisplay.classList.toggle("stroke", strokeToggle.checked);
 }
 
+function updateBold() {
+  popDisplay.style.fontWeight = boldToggle.checked ? "bold" : "normal";
+}
+
+function updateItalic() {
+  popDisplay.style.fontStyle = italicToggle.checked ? "italic" : "normal";
+}
+
 // ── Event listeners ──
 popText.addEventListener("input", updateText);
 fontSelect.addEventListener("change", updateFont);
@@ -59,6 +69,8 @@ textColor.addEventListener("input", updateTextColor);
 bgColor.addEventListener("input", updateBgColor);
 shadowToggle.addEventListener("change", updateShadow);
 strokeToggle.addEventListener("change", updateStroke);
+boldToggle.addEventListener("change", updateBold);
+italicToggle.addEventListener("change", updateItalic);
 fontUpload.addEventListener("change", handleFontUpload);
 
 // ── Load server-side fonts on startup ──
