@@ -11,6 +11,8 @@ const copyBtn = document.getElementById("copyBtn");
 const copyToast = document.getElementById("copyToast");
 const preview = document.getElementById("preview");
 const popDisplay = document.getElementById("popDisplay");
+const fontUpload = document.getElementById("fontUpload");
+let customFontCounter = 0;
 
 // ── Update helpers ──
 function updateText() {
@@ -57,6 +59,43 @@ textColor.addEventListener("input", updateTextColor);
 bgColor.addEventListener("input", updateBgColor);
 shadowToggle.addEventListener("change", updateShadow);
 strokeToggle.addEventListener("change", updateStroke);
+fontUpload.addEventListener("change", handleFontUpload);
+
+// ── Custom font upload ──
+async function handleFontUpload(e) {
+  const files = e.target.files;
+  if (!files.length) return;
+
+  for (const file of files) {
+    try {
+      const buffer = await file.arrayBuffer();
+      // Derive a readable name from the file name (strip extension)
+      const baseName = file.name.replace(/\.[^.]+$/, "");
+      customFontCounter++;
+      const familyName = `Custom_${baseName}`;
+
+      const font = new FontFace(familyName, buffer);
+      await font.load();
+      document.fonts.add(font);
+
+      // Add to the dropdown
+      const option = document.createElement("option");
+      option.value = `'${familyName}'`;
+      option.textContent = `${baseName} (custom)`;
+      fontSelect.appendChild(option);
+
+      // Auto-select the last uploaded font
+      fontSelect.value = option.value;
+      updateFont();
+    } catch (err) {
+      console.error(`Failed to load font "${file.name}":`, err);
+      alert(`Could not load "${file.name}". Make sure it is a valid font file.`);
+    }
+  }
+
+  // Reset the input so the same file(s) can be re-uploaded if needed
+  fontUpload.value = "";
+}
 
 // ── Copy as Image ──
 copyBtn.addEventListener("click", async () => {
