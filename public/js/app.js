@@ -131,7 +131,7 @@ async function handleFontUpload(e) {
       // Add to the dropdown
       const option = document.createElement("option");
       option.value = `'${familyName}'`;
-      option.textContent = `${baseName} (custom)`;
+      option.textContent = `${baseName} (local)`;
       fontSelect.appendChild(option);
 
       // Auto-select the last uploaded font
