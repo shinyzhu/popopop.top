@@ -45,6 +45,7 @@ async function handleListFonts(env) {
 
     return Response.json(fonts);
   } catch (err) {
+    console.error("Error listing fonts from R2:", err);
     return Response.json({ error: "Failed to list fonts" }, { status: 500 });
   }
 }
