@@ -128,7 +128,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-/public/fonts
+/public/fonts/*
+!/public/fonts/google/
 
 # Wrangler
 .wrangler/
