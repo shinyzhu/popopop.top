@@ -7,4 +7,4 @@ directory = "./public"
 
 [[r2_buckets]]
 binding = "FONTS_BUCKET"
-bucket_name = "popopop-fonts"
+bucket_name = "fonts"
