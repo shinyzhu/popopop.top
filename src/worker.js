@@ -28,11 +28,11 @@ export default {
 
 async function handleListFonts(env) {
   try {
-    const listed = await env.FONTS_BUCKET.list({ prefix: "fonts/" });
+    const listed = await env.FONTS_BUCKET.list();
 
     const fonts = listed.objects
       .map((obj) => {
-        const file = obj.key.replace(/^fonts\//, "");
+        const file = obj.key;
         const ext = file.split(".").pop().toLowerCase();
         if (!FONT_EXTENSIONS.has(ext)) return null;
         return {
@@ -52,9 +52,9 @@ async function handleListFonts(env) {
 
 async function handleGetFont(pathname, env) {
   // pathname is e.g. "/fonts/MyFont.woff2"
-  // R2 key is "fonts/MyFont.woff2"
-  const key = pathname.slice(1); // remove leading "/"
-  const fileName = key.replace(/^fonts\//, "");
+  // R2 key is "MyFont.woff2" (stored at bucket root)
+  const key = pathname.replace(/^\/fonts\//, "");
+  const fileName = key;
   const ext = fileName.split(".").pop().toLowerCase();
 
   if (!FONT_EXTENSIONS.has(ext)) {
