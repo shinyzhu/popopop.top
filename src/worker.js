@@ -1,11 +1,6 @@
 const FONT_EXTENSIONS = new Set(["ttf", "otf", "woff", "woff2"]);
 
-const MIME_TYPES = {
-  ttf: "font/ttf",
-  otf: "font/otf",
-  woff: "font/woff",
-  woff2: "font/woff2",
-};
+const FONTS_DOMAIN = "https://fonts.popopop.top";
 
 export default {
   async fetch(request, env) {
@@ -14,11 +9,6 @@ export default {
     // GET /api/fonts – list font files stored in R2
     if (url.pathname === "/api/fonts") {
       return handleListFonts(env);
-    }
-
-    // GET /fonts/<file> – serve a font file from R2
-    if (url.pathname.startsWith("/fonts/")) {
-      return handleGetFont(url.pathname, env);
     }
 
     // Everything else is served by the static assets (public/)
@@ -38,7 +28,7 @@ async function handleListFonts(env) {
         return {
           file,
           name: file.replace(/\.[^.]+$/, ""),
-          url: `/fonts/${file}`,
+          url: `${FONTS_DOMAIN}/${encodeURIComponent(file)}`,
         };
       })
       .filter(Boolean);
@@ -48,30 +38,4 @@ async function handleListFonts(env) {
     console.error("Error listing fonts from R2:", err);
     return Response.json({ error: "Failed to list fonts" }, { status: 500 });
   }
-}
-
-async function handleGetFont(pathname, env) {
-  // pathname is e.g. "/fonts/MyFont.woff2"
-  // R2 key is "MyFont.woff2" (stored at bucket root)
-  const key = pathname.replace(/^\/fonts\//, "");
-  const fileName = key;
-  const ext = fileName.split(".").pop().toLowerCase();
-
-  if (!FONT_EXTENSIONS.has(ext)) {
-    return new Response("Not Found", { status: 404 });
-  }
-
-  const object = await env.FONTS_BUCKET.get(key);
-
-  if (!object) {
-    return new Response("Font not found", { status: 404 });
-  }
-
-  return new Response(object.body, {
-    headers: {
-      "Content-Type": MIME_TYPES[ext] || "application/octet-stream",
-      "Cache-Control": "public, max-age=31536000, immutable",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
 }
