@@ -38,7 +38,7 @@ async function handleListFonts(env) {
         return {
           file,
           name: file.replace(/\.[^.]+$/, ""),
-          url: `/fonts/${encodeURIComponent(file)}`,
+          url: `/fonts/${file}`,
         };
       })
       .filter(Boolean);

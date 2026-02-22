@@ -96,7 +96,8 @@ async function loadServerFonts() {
 
     for (const { name, url } of fonts) {
       const familyName = `Server_${name}`;
-      const fontFace = new FontFace(familyName, `url('${url}')`);
+      const encodedUrl = encodeURI(url);
+      const fontFace = new FontFace(familyName, `url('${encodedUrl}')`);
       await fontFace.load();
       document.fonts.add(fontFace);
 
