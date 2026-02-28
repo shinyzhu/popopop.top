@@ -16,6 +16,7 @@ const boldToggle = document.getElementById("boldToggle");
 const italicToggle = document.getElementById("italicToggle");
 const shadowColor = document.getElementById("shadowColor");
 const strokeColor = document.getElementById("strokeColor");
+const transparentBg = document.getElementById("transparentBg");
 let customFontCounter = 0;
 
 // ── Update helpers ──
@@ -42,7 +43,21 @@ function updateTextColor() {
 }
 
 function updateBgColor() {
-  preview.style.backgroundColor = bgColor.value;
+  if (!transparentBg.checked) {
+    preview.style.backgroundColor = bgColor.value;
+  }
+}
+
+function updateTransparentBg() {
+  if (transparentBg.checked) {
+    preview.classList.add("transparent-bg");
+    preview.style.backgroundColor = "";
+    bgColor.disabled = true;
+  } else {
+    preview.classList.remove("transparent-bg");
+    preview.style.backgroundColor = bgColor.value;
+    bgColor.disabled = false;
+  }
 }
 
 function updateShadow() {
@@ -84,6 +99,7 @@ shadowColor.addEventListener("input", updateShadow);
 strokeColor.addEventListener("input", updateStroke);
 boldToggle.addEventListener("change", updateBold);
 italicToggle.addEventListener("change", updateItalic);
+transparentBg.addEventListener("change", updateTransparentBg);
 fontUpload.addEventListener("change", handleFontUpload);
 
 // ── Load server-side fonts on startup ──
@@ -154,11 +170,22 @@ copyBtn.addEventListener("click", async () => {
     copyBtn.innerHTML =
       '<span class="spinner-border spinner-border-sm"></span> Capturing…';
 
+    // If transparent mode, temporarily strip the checkerboard so it's not captured
+    const isTransparent = transparentBg.checked;
+    if (isTransparent) {
+      preview.style.backgroundImage = "none";
+    }
+
     const canvas = await html2canvas(preview, {
-      backgroundColor: null,
+      backgroundColor: isTransparent ? null : preview.style.backgroundColor || "#fffbe6",
       scale: 2, // retina-quality
       useCORS: true,
     });
+
+    // Restore the checkerboard pattern
+    if (isTransparent) {
+      preview.style.backgroundImage = "";
+    }
 
     canvas.toBlob(async (blob) => {
       if (!blob) {
